@@ -76,8 +76,24 @@ BigInt sub(BigInt a, BigInt b)
 
 BigInt mul(BigInt a, BigInt b)
 {
-    BigInt c;
-
+    BigInt c = new(struct bigint);
+    int i, j;
+    for (i = 0; i < b->len; i++)
+    {
+        int CF = 0;
+        for (j = 0; j < a->len; j++)
+        {
+            int tmp = a->digit[j]*b->digit[i]+c->digit[i+j]+CF;
+            c->digit[i+j] = tmp%10;
+            if (i+j >= c->len) c->len++;
+            CF = tmp/10;
+        }
+        if (CF)
+        {
+            c->digit[i+j] = CF;
+            if (i+j >= c->len) c->len++;
+        }
+    }
 
     return c;
 }
@@ -117,9 +133,9 @@ int main()
     BigInt2String(C, c);
     cout << c << endl;
 
-    // C = mul(A, B);
-    // BigInt2String(C, c);
-    // cout << c << endl;
+    C = mul(A, B);
+    BigInt2String(C, c);
+    cout << c << endl;
 
     // C = div(A, B);
     // BigInt2String(C, c);
