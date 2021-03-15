@@ -35,6 +35,57 @@ void BigInt2String(BigInt d, char *s)
     s[d->len] = '\0';
 }
 
+BigInt Copy(BigInt d)
+{
+    BigInt r = new(struct bigint);
+    r->len = d->len;
+    for (int i = 0; i < r->len; i++)
+    {
+        r->digit[i] = d->digit[i];
+    }
+
+    return r;
+}
+
+int Compare(BigInt a, BigInt b)
+{
+    if (a->len > b->len)
+    {
+        return 1;
+    }
+    else if (a->len < b->len)
+    {
+        return -1;
+    }
+    else
+    {
+        for (int i = a->len-1; i >= 0; i--)
+        {
+            if (a->digit[i] > b->digit[i])
+            {
+                return 1;
+            }
+            else if(a->digit[i] < b->digit[i])
+            {
+                return -1;
+            }
+        }
+        return 0;
+    }
+}
+
+BigInt ShiftRight(BigInt d, int n)
+{
+    BigInt r = new(struct bigint);
+    r->len = d->len+n;
+    for (int i = n; i < r->len; i++)
+    {
+        r->digit[i] = d->digit[i-n];
+    }
+
+    return r;
+}
+
 BigInt add(BigInt a, BigInt b)
 {
     BigInt c = new(struct bigint);
@@ -100,18 +151,43 @@ BigInt mul(BigInt a, BigInt b)
 
 BigInt div(BigInt a, BigInt b)
 {
-    BigInt c;
-
+    BigInt c = new(struct bigint);
+    BigInt divisor;
+    BigInt divident = Copy(a);
+    c->len = a->len-b->len+1;
+    for (int i = a->len-b->len; i >= 0; i--)
+    {
+        divisor = ShiftRight(b, i);
+        while (Compare(divident, divisor) != -1)
+        {
+            c->digit[i]++;
+            divident = sub(divident, divisor);
+        }
+    }
 
     return c;
 }
 
 BigInt mod(BigInt a, BigInt b)
 {
-    BigInt c;
+    BigInt c = new(struct bigint);
+    BigInt divisor;
+    BigInt divident = Copy(a);
+    c->len = a->len-b->len+1;
+    for (int i = a->len-b->len; i >= 0; i--)
+    {
+        divisor = ShiftRight(b, i);
+        while (Compare(divident, divisor) != -1)
+        {
+            c->digit[i]++;
+            divident = sub(divident, divisor);
+        }
+    }
 
+    BigInt round = mul(b, c);
+    BigInt remainder = sub(a, round);
 
-    return c;
+    return remainder;
 }
 
 int main()
@@ -137,13 +213,13 @@ int main()
     BigInt2String(C, c);
     cout << c << endl;
 
-    // C = div(A, B);
-    // BigInt2String(C, c);
-    // cout << c << endl;
+    C = div(A, B);
+    BigInt2String(C, c);
+    cout << c << endl;
 
-    // C = mod(A, B);
-    // BigInt2String(C, c);
-    // cout << c << endl;
+    C = mod(A, B);
+    BigInt2String(C, c);
+    cout << c << endl;
 
     return 0;
 }
