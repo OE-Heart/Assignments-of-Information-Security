@@ -2,37 +2,31 @@
 #include <cstring>
 using namespace std;
 
-double IC(int *Num, double total);
+double CI(int *Num, double total);
 void Vigenere(char* Ciphertext, char* Plaintext, char* key, int keyLenth);
 int find_string(char str[], char substr[]);
-
-// int main()
-// {
-//     string Ciphertext = "ktbueluegvitnthuexmonveggmrcgxptlyhhjaogchoemqchpdnetxupbqntietiabpsmaoncnwvoutiugtagmmqsxtvxaoniiogtagmbpsmtuvvihpstpdvcrxhokvhxotawswquunewcgxptlcrxtevtubvewcnwwsxfsnptswtagakvoyyak";
-    
-//     int keyLenth;
-//     int NumOfAlpha[26];
-
-//     for (keyLenth = 1; keyLenth < 10; keyLenth++)
-//     {
-//         cout << "The keyLenth is " << keyLenth << endl;
-//         for (int i = 0; i < keyLenth; i++)
-//         {
-//             memset(NumOfAlpha, 0, sizeof(int)*26);
-//             for (int j = i; j < Ciphertext.size(); j += keyLenth)
-//             {
-//                 NumOfAlpha[int(Ciphertext[j])-97] += 1;
-//             }
-//             cout << IC(NumOfAlpha, 1.0*Ciphertext.size()/keyLenth) << endl;
-//         }
-//     }
-
-//     return 0;
-// }
 
 int main()
 {
     char Ciphertext[200] = "ktbueluegvitnthuexmonveggmrcgxptlyhhjaogchoemqchpdnetxupbqntietiabpsmaoncnwvoutiugtagmmqsxtvxaoniiogtagmbpsmtuvvihpstpdvcrxhokvhxotawswquunewcgxptlcrxtevtubvewcnwwsxfsnptswtagakvoyyak";
+
+    int keyLenth;
+    int NumOfAlpha[26];
+
+    for (keyLenth = 1; keyLenth < 10; keyLenth++)
+    {
+        cout << "The keyLenth is " << keyLenth << endl;
+        for (int i = 0; i < keyLenth; i++)
+        {
+            memset(NumOfAlpha, 0, sizeof(int)*26);
+            for (int j = i; j < strlen(Ciphertext); j += keyLenth)
+            {
+                NumOfAlpha[int(Ciphertext[j])-97] += 1;
+            }
+            cout << CI(NumOfAlpha, 1.0*strlen(Ciphertext)/keyLenth) << endl;
+        }
+    }
+
     char Plaintext[200];
     char key[4];
     key[4] = '\0';
@@ -58,7 +52,7 @@ int main()
     return 0;
 }
 
-double IC(int *Num, double total)
+double CI(int *Num, double total)
 {
     double result = 0;
     for (int i = 0; i < 26; i++)
