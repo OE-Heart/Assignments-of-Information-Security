@@ -23,29 +23,19 @@ BigInt Int2BigInt(int x)
         d->digit[len++] = x%10;
         x /= 10;
     }
+    d->len = len;
 
     return d;
 }
 
-BigInt String2BigInt(char* s)
+int BigInt2Int(BigInt d)
 {
-    BigInt d = new(struct bigint);
-    d->len = strlen(s);
-    for (int i = 0; i < d->len; i++)
+    int x = 0;
+    for (int i = d->len-1; i >= 0; i--)
     {
-        d->digit[i] = s[d->len-i-1]-'0';
+        x = x*10 + d->digit[i];
     }
-
-    return d;
-}
-
-void BigInt2String(BigInt d, char *s)
-{
-    for (int i = 0; i < d->len; i++)
-    {
-        s[d->len-i-1] = d->digit[i]+'0';
-    }
-    s[d->len] = '\0';
+    return x;
 }
 
 BigInt Copy(BigInt d)
@@ -205,13 +195,6 @@ BigInt mod(BigInt a, BigInt b)
 
 int main()
 {
-    // int x;
-    // cin >> x;
-    // BigInt X = Int2BigInt(x);
-    // char c[MAX];
-    // BigInt2String(X, c);
-    // cout << c << endl;
-
     int p, g, a, b;
     cin >> p;
     cin >> g;
@@ -222,42 +205,45 @@ int main()
     BigInt A = Int2BigInt(a);
     BigInt B = Int2BigInt(b);
 
-    BigInt XA = mul()
-    char c[MAX];
+    BigInt XA = mul(G, G);
+    for (int i = 2; i < a; i++)
+    {
+        XA = mul(XA, G);
+    }
+    BigInt YA = mod(XA, P);
+    
+    BigInt XB = mul(G, G);
+    for (int i = 2; i < b; i++)
+    {
+        XB = mul(XB, G);
+    }
+    BigInt YB = mod(XB, P);
 
-    return 0; 
+    int ya = BigInt2Int(YA);
+    cout << ya << endl;
+    int yb = BigInt2Int(YB);
+    cout << yb << endl;
+
+    int xa = BigInt2Int(XA);
+    int xb = BigInt2Int(XB);
+
+    BigInt AK = mul(YA, YA);
+    for (int i = 2; i < b; i++)
+    {
+        AK = mul(AK, YA);
+    }
+    BigInt K = mod(AK, P);
+    int k = BigInt2Int(K);
+    cout << k << endl;
+
+    // BigInt BK = mul(YB, YB);
+    // for (int i = 2; i < a; i++)
+    // {
+    //     BK = mul(BK, YB);
+    // }
+    // BigInt T = mod(BK, P);
+    // int t = BigInt2Int(T);
+    // cout << t << endl;
+
+    return 0;
 }
-
-// int main()
-// {
-//     char a[MAX], b[MAX];
-//     cin >> a;
-//     cin >> b;
-
-//     BigInt A = String2BigInt(a);
-//     BigInt B = String2BigInt(b);
-//     BigInt C;
-//     char c[MAX];
-
-//     C = add(A, B);
-//     BigInt2String(C, c);
-//     cout << c << endl;
-
-//     C = sub(A, B);
-//     BigInt2String(C, c);
-//     cout << c << endl;
-
-//     C = mul(A, B);
-//     BigInt2String(C, c);
-//     cout << c << endl;
-
-//     C = div(A, B);
-//     BigInt2String(C, c);
-//     cout << c << endl;
-
-//     C = mod(A, B);
-//     BigInt2String(C, c);
-//     cout << c << endl;
-
-//     return 0;
-// }

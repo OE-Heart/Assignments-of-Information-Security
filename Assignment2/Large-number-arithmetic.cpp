@@ -165,6 +165,11 @@ BigInt div(BigInt a, BigInt b)
         }
     }
 
+    while (c->len >= 2 && c->digit[c->len-1] == 0)
+    {
+        c->len--;
+    }
+
     return c;
 }
 
